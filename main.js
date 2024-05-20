@@ -15,42 +15,42 @@ const galleryImages = [
 
 const products = [
     {
-      title: "AstroFiction",
-      author: "John Doe",
-      price: 49.9,
-      image: "./assets/products/img6.png"
+        title: "AstroFiction",
+        author: "John Doe",
+        price: 49.9,
+        image: "./assets/products/img6.png"
     },
     {
-      title: "Space Odissey",
-      author: "Marie Anne",
-      price: 35,
-      image: "./assets/products/img1.png"
+        title: "Space Odissey",
+        author: "Marie Anne",
+        price: 35,
+        image: "./assets/products/img1.png"
     },
     {
-      title: "Doomed City",
-      author: "Jason Cobert",
-      price: 0,
-      image: "./assets/products/img2.png"
+        title: "Doomed City",
+        author: "Jason Cobert",
+        price: 0,
+        image: "./assets/products/img2.png"
     },
     {
-      title: "Black Dog",
-      author: "John Doe",
-      price: 85.35,
-      image: "./assets/products/img3.png"
+        title: "Black Dog",
+        author: "John Doe",
+        price: 85.35,
+        image: "./assets/products/img3.png"
     },
     {
-      title: "My Little Robot",
-      author: "Pedro Paulo",
-      price: 0,
-      image: "./assets/products/img5.png"
+        title: "My Little Robot",
+        author: "Pedro Paulo",
+        price: 0,
+        image: "./assets/products/img5.png"
     },
     {
-      title: "Garden Girl",
-      author: "Ankit Patel",
-      price: 45,
-      image: "./assets/products/img4.png"
+        title: "Garden Girl",
+        author: "Ankit Patel",
+        price: 45,
+        image: "./assets/products/img4.png"
     }
-  ]
+]
 
 // Menu section
 function menuHandler() {
@@ -154,15 +154,17 @@ function galleryHandler() {
     });
 }
 
-function productsHandler() {
+function populateProducts(productList) {
     let productsSection = document.querySelector(".products-area");
 
+    productsSection.textContent = "";
+
     // Run a loop through the prodcts and create an HTML element(product-item") for each of them
-    products.forEach(function(product, index){
+    productList.forEach(function (product, index) {
         // Create the HTML element for the individual product
         let productElm = document.createElement("div");
         productElm.classList.add("product-item");
-        
+
         // Create the product image
         let productImg = document.createElement("img");
         productImg.src = product.image;
@@ -205,6 +207,37 @@ function productsHandler() {
     });
 }
 
+function productsHandler() {
+    let freeProducts = products.filter(function (prod) {
+        return !prod.price || prod.price <= 0;
+    });
+    let paidProducts = products.filter(function (prod) {
+        return prod.price > 0;
+    });
+
+    document.querySelector(".products-filter label[for=all] span.product-amount").textContent = products.length;
+    document.querySelector(".products-filter label[for=paid] span.product-amount").textContent = paidProducts.length;
+    document.querySelector(".products-filter label[for=free] span.product-amount").textContent = freeProducts.length;
+
+    populateProducts(products);
+
+    let productsFilter = document.querySelector(".products-filter");
+    productsFilter.addEventListener("click", function(e) {
+        if (e.target.id === "all") {
+            populateProducts(products);
+        } else if (e.target.id === "paid") {
+            populateProducts(paidProducts);
+        } else if (e.target.id === "free") {
+            populateProducts(freeProducts);
+        }
+    });
+
+}
+
+function footerHandler() {
+    let currentYear = new Date().getFullYear();
+    document.querySelector("footer").textContent = `© ${currentYear} - All rights reserved`;
+}
 
 // Page load
 menuHandler();
@@ -212,3 +245,4 @@ greetingHandler();
 clockHandler();
 galleryHandler();
 productsHandler();
+footerHandler();
